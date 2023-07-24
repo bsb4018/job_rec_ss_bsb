@@ -1,0 +1,69 @@
+import os,sys
+import pandas as pd
+from src.logger import logging
+from src.exception import JobRecException
+from src.entity.config_entity import DataIngestionConfig
+from src.constant.file_constants import JOBS_DATA_FILE_PATH
+from src.configurations.mongo_setup import MongoDBClient
+from src.entity.artifact_entity import DataIngestionArtifact
+
+class DataIngestion:
+    def __init__(self, data_ingestion_config:DataIngestionConfig):
+        try:
+            self.data_ingestion_config = data_ingestion_config
+            self.mongo_client = MongoDBClient()
+            self.collection = self.mongo_client.dbcollection
+
+        except Exception as e:
+            raise JobRecException(e,sys)
+        
+    def load_data(self):
+        try:
+            logging.info("DATA INGESTION: Loading Data...")
+            jobsdf = pd.read_excel(JOBS_DATA_FILE_PATH)
+            jobsdf.dropna(inplace=True)
+            jobsdf.drop_duplicates(subset=['Key_Skills'],inplace=True)
+
+            job_ids = [i for i in range(0,len(jobsdf))]
+            jobsdf["job_id"] = job_ids
+
+            save_users_file = self.data_ingestion_config.jobs_file_name
+            dir_path = os.path.dirname(save_users_file)
+            os.makedirs(dir_path, exist_ok=True)
+            jobsdf.to_parquet(save_users_file, engine='fastparquet', index=False)
+            logging.info("Data Ingested")
+            return jobsdf
+        
+        except Exception as e:
+            raise JobRecException(e,sys)
+        
+    def store_data_mongodb(self,df):
+        try:
+            logging.info("Storing data in MongoDB")
+            for index,row in df.iterrows():
+                job_id = row["job_id"]
+                job_name = row["Job_Name"]
+                company_name = row["Company_Name"]
+                key_skills = row["Key_Skills"]             
+                self.collection.insert_one({"job_id": job_id, "job_name": job_name, "company_name": company_name, "key_skills": key_skills})
+            logging.info("Successfully stored data in MongoDB")
+
+        except Exception as e:
+            raise JobRecException(e,sys)
+        
+
+    def initiate_data_ingestion(self) -> DataIngestionArtifact:
+
+        try:
+            logging.info("Entered initiate_data_ingestion method of Data_Ingestion class")
+            df = self.load_data()
+            self.store_data_mongodb(df)
+            logging.info("DATA INGESTION: Storing Artifacts...")
+            data_ingestion_artifact = DataIngestionArtifact(
+                jobs_file_path=self.data_ingestion_config.jobs_file_name,
+            )
+            logging.info(f"Data ingestion artifact: {data_ingestion_artifact}")
+            return data_ingestion_artifact
+        
+        except Exception as e:
+            raise JobRecException(e, sys)
