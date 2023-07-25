@@ -3,9 +3,10 @@ from memory_profiler import profile
 from src.exception import JobRecException
 from src.logger import logging
 from src.entity.config_entity import StoreGenearatePipelineConfig
-from src.entity.artifact_entity import DataIngestionArtifact
-from src.entity.config_entity import DataIngestionConfig
+from src.entity.artifact_entity import DataIngestionArtifact,EmbedIndexingArtifact
+from src.entity.config_entity import DataIngestionConfig,EmbedIndexingConfig
 from src.components.data_ingestion import DataIngestion
+from src.components.embed_index import EmbedIndex
 
 class StoreGeneratePipeline:
     '''
@@ -40,16 +41,39 @@ class StoreGeneratePipeline:
     
         except Exception as e:
             raise JobRecException(e, sys)
+        
+    def start_data_embed_indexing(self,data_ingestion_artifact:DataIngestionArtifact) -> EmbedIndexingArtifact:
+        try:
+            
+            logging.info(
+              "Entered the start_data_embed_indexing method of StoreGeneratePipeline class"
+            )
+            self.data_embed_index_config = EmbedIndexingConfig(store_gen_pipeline_config=self.store_gen_pipeline_config)
+            
+            logging.info("Starting data embeding and indexing")
+            data_embed_index = EmbedIndex(
+            embed_index_config = self.data_embed_index_config, data_ingestion_artifact = data_ingestion_artifact
+            )
+            data_embed_index_artifact = data_embed_index.initiate_data_embed_indexing()
+            logging.info(f"start_data_embed_indexing completed and artifact: {data_embed_index_artifact}")
+            logging.info(
+                "Exited the start_data_embed_indexing method of StoreGeneratePipelinee class"
+            )
+            
+            return data_embed_index_artifact
+    
+        except Exception as e:
+            raise JobRecException(e, sys)
 
     #@profile    
     def run_pipeline(self):
         try:
             logging.info("Starting the Data Storing and Embedding Genearation Pipeline")
             StoreGenearatePipelineConfig.is_pipeline_running=True
-            data_ingestion_artifact:DataIngestionArtifact = self.start_data_ingestion()
-            
+            data_ingestion_artifact: DataIngestionArtifact = self.start_data_ingestion()
+            data_embed_index_artifact: EmbedIndexingArtifact = self.start_data_embed_indexing(data_ingestion_artifact)
 
-            logging.info("Data Ingested, Processed and Stored into MongoDB")
+            logging.info("Data Ingested, Embedded, Indexed -> Done")
         except Exception as e:
             raise JobRecException(e,sys)
         

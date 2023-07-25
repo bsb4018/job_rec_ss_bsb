@@ -155,3 +155,4 @@ memory_profile.log
 saved_models/
 production/
 artifacts/
+src/model/downloaded_model/
