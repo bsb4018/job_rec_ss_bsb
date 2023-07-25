@@ -26,3 +26,8 @@ class EmbedIndexingConfig:
         self.index_file_name: str = os.path.join(
             self.embed_index_dir, EMBED_INDEXING_FILE_NAME
         )
+
+class ModelPusherConfig:
+    def __init__(self,store_gen_pipeline_config:StoreGenearatePipelineConfig):
+
+        self.saved_model_path = os.path.join(SAVED_MODEL_DIR,store_gen_pipeline_config.timestamp,SAVED_MODEL_FILE_NAME)

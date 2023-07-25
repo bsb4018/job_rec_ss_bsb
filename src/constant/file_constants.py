@@ -11,7 +11,9 @@ PIPELINE_NAME = "job_recommender"
 MODEL_NAME = "msmarco-distilbert-base-dot-prod-v3"
 MODEL_INDEX_SIZE = 768
 MODEL_LOCATION_DIR = "downloaded_model"
-
+SAVED_MODEL_DIR = "production"
+SAVED_MODEL_FILE_NAME = "production_embed_index.index"
+MODEL_BUCKET_NAME = "job-recommender-sys-model-bucket-bsb6775"
 
 DATA_INGESTION_DIR_NAME = "data_ingestion"
 DATA_INGESTION_FILE_NAME = "jobs_data.parquet"

@@ -2,11 +2,14 @@ import os,sys
 from memory_profiler import profile
 from src.exception import JobRecException
 from src.logger import logging
+from src.constant.file_constants import MODEL_BUCKET_NAME,SAVED_MODEL_DIR
 from src.entity.config_entity import StoreGenearatePipelineConfig
 from src.entity.artifact_entity import DataIngestionArtifact,EmbedIndexingArtifact
-from src.entity.config_entity import DataIngestionConfig,EmbedIndexingConfig
+from src.entity.config_entity import DataIngestionConfig,EmbedIndexingConfig,ModelPusherConfig
 from src.components.data_ingestion import DataIngestion
 from src.components.embed_index import EmbedIndex
+from src.components.model_pusher import ModelPusher
+from src.configurations.aws_s3_syncer import S3Sync
 
 class StoreGeneratePipeline:
     '''
@@ -15,6 +18,7 @@ class StoreGeneratePipeline:
     def __init__(self,):
         try:
             self.store_gen_pipeline_config = StoreGenearatePipelineConfig()
+            self.s3_sync = S3Sync()
         except Exception as e:
             raise JobRecException(e,sys)
         
@@ -57,13 +61,61 @@ class StoreGeneratePipeline:
             data_embed_index_artifact = data_embed_index.initiate_data_embed_indexing()
             logging.info(f"start_data_embed_indexing completed and artifact: {data_embed_index_artifact}")
             logging.info(
-                "Exited the start_data_embed_indexing method of StoreGeneratePipelinee class"
+                "Exited the start_data_embed_indexing method of StoreGeneratePipeline class"
             )
             
             return data_embed_index_artifact
     
         except Exception as e:
             raise JobRecException(e, sys)
+    
+    def start_model_pusher(self,data_embed_index_artifact:EmbedIndexingArtifact):
+        try:
+            logging.info("Entered the start_model_pusher method of StoreGeneratePipeline class")
+            model_pusher_config = ModelPusherConfig(store_gen_pipeline_config=self.store_gen_pipeline_config)
+            model_pusher = ModelPusher(model_pusher_config, data_embed_index_artifact)
+            model_pusher_artifact = model_pusher.initiate_model_pusher()
+
+            logging.info("Performed the Model Pusher operation")
+            logging.info(
+                "Exited the start_model_pusher method of StoreGeneratePipeline class"
+            )
+
+            return model_pusher_artifact
+        except  Exception as e:
+            raise  JobRecException(e,sys)
+    
+    def sync_logs_dir_to_s3(self):
+        try:
+            logging.info("Entered the sync_logs_dir_to_s3 method of StoreGeneratePipeline class")
+            aws_bucket_url = f"s3://{MODEL_BUCKET_NAME}/logs"
+            logs_dir = os.path.join("logs")
+            self.s3_sync.sync_folder_to_s3(folder = logs_dir,aws_buket_url=aws_bucket_url)
+            logging.info("Performed Syncing of logs to S3 bucket")
+
+        except Exception as e:
+            raise JobRecException(e,sys)
+
+    def sync_artifact_dir_to_s3(self):
+        try:
+            logging.info("Entered the sync_artifact_dir_to_s3 method of StoreGeneratePipeline class")
+            aws_bucket_url = f"s3://{MODEL_BUCKET_NAME}/artifact/{self.store_gen_pipeline_config.timestamp}"
+            self.s3_sync.sync_folder_to_s3(folder=self.store_gen_pipeline_config.artifact_dir, aws_buket_url=aws_bucket_url)
+            logging.info("Performed Syncing of artifact to S3 bucket")
+
+        except Exception as e:
+            raise JobRecException(e,sys)
+
+    def sync_saved_model_dir_to_s3(self):
+        try:
+            logging.info("Entered the sync_saved_model_dir_to_s3 method of StoreGeneratePipeline class")
+            aws_bucket_url = f"s3://{MODEL_BUCKET_NAME}/{SAVED_MODEL_DIR}"
+            self.s3_sync.sync_folder_to_s3(folder=SAVED_MODEL_DIR, aws_buket_url=aws_bucket_url)
+            logging.info("Performed Syncing of production models to S3 bucket")
+
+        except Exception as e:
+            raise JobRecException(e,sys)
+
 
     #@profile    
     def run_pipeline(self):
@@ -72,9 +124,17 @@ class StoreGeneratePipeline:
             StoreGenearatePipelineConfig.is_pipeline_running=True
             data_ingestion_artifact: DataIngestionArtifact = self.start_data_ingestion()
             data_embed_index_artifact: EmbedIndexingArtifact = self.start_data_embed_indexing(data_ingestion_artifact)
+            model_pusher_artifact = self.start_model_pusher(data_embed_index_artifact)
+            StoreGenearatePipelineConfig.is_pipeline_running=False
+            
+            #self.sync_logs_dir_to_s3()
+            self.sync_artifact_dir_to_s3()
+            self.sync_saved_model_dir_to_s3()
+            logging.info("Data Ingested, Embedded, Indexed Pushed -> Done")
 
-            logging.info("Data Ingested, Embedded, Indexed -> Done")
         except Exception as e:
+            self.sync_artifact_dir_to_s3()
+            StoreGenearatePipelineConfig.is_pipeline_running=False
             raise JobRecException(e,sys)
         
 
