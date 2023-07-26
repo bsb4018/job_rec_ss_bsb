@@ -19,4 +19,5 @@ dnspython
 tqdm
 openpyxl
 boto3
+streamlit
 -e.

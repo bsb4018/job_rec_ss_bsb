@@ -21,7 +21,8 @@ class EmbedIndex:
     def store_embeddings(self,jobsdf):
         try:
             model = self.model_loader.load_model()
-            encoded_data = model.encode(jobsdf.Key_Skills.tolist())
+            encoding_data = jobsdf.Key_Skills + jobsdf.Job_Name
+            encoded_data = model.encode(encoding_data.tolist())
             encoded_data = np.asarray(encoded_data.astype('float32'))
             return encoded_data
         except Exception as e:

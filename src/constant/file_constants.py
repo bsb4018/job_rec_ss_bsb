@@ -1,5 +1,4 @@
-import sys,os
-import from_root
+
 
 JOBS_DATA_FILE_PATH = "data/jobs_data.xlsx"
 MONGODB_URL_KEY = "MONGO_DB_URL"
@@ -13,7 +12,7 @@ MODEL_INDEX_SIZE = 768
 MODEL_LOCATION_DIR = "downloaded_model"
 SAVED_MODEL_DIR = "production"
 SAVED_MODEL_FILE_NAME = "production_embed_index.index"
-TOP_N_RESULTS = 5
+TOP_N_RESULTS = 6
 
 DATA_INGESTION_DIR_NAME = "data_ingestion"
 DATA_INGESTION_FILE_NAME = "jobs_data.parquet"
