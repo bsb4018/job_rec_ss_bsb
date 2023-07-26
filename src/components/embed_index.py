@@ -54,7 +54,7 @@ class EmbedIndex:
             data_embed_index_artifact = EmbedIndexingArtifact(
                 faiss_index_file_path = self.embed_index_config.index_file_name,
             )
-            logging.info(f"EmbedIndex artifact: { data_embed_index_artifact}")
+            logging.info(f"EmbedIndex artifact: {data_embed_index_artifact}")
             return data_embed_index_artifact
         
         except Exception as e:
