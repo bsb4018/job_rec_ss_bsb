@@ -4,7 +4,7 @@ import numpy as np
 from src.exception import JobRecException
 from src.logger import logging
 from src.components.model_recommender import ModelRecommender
-
+import pprint
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -19,7 +19,7 @@ class RecommenderPipeline:
         
     def get_recommendations(self,query):
         try:
-            logging.info("Entered initiate_model_trainer method of ModelRecommender class")          
+            logging.info("Entered get_recommendations method of RecommenderPipeline class")          
 
             recommended_list = self.model_recommender.recommend(query)
             return recommended_list
@@ -30,4 +30,4 @@ class RecommenderPipeline:
 
 if __name__ == "__main__":
     ob1 = RecommenderPipeline()
-    print(ob1.get_recommendations("data science analytics python"))
+    pprint.pprint(ob1.get_recommendations("data science analytics python"))

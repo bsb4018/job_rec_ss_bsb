@@ -9,21 +9,15 @@ class LoadIndex:
     def __init__(self,):
         try:
             self.index_file_path = os.path.join(SAVED_MODEL_DIR)
-            self.config = AwsStorage()
-            self.session = Session(aws_access_key_id=self.config.ACCESS_KEY_ID,
-                                   aws_secret_access_key=self.config.SECRET_KEY,
-                                   region_name=self.config.REGION_NAME)
-            self.s3 = self.session.resource("s3")
-            self.bucket = self.s3.Bucket(self.config.BUCKET_NAME)
         except Exception as e:
             raise JobRecException(e,sys)
 
-    def download_latest_model(self):
+    def download_latest_model(self,bucket):
         try:
             logging.info("Connecting to Bucket -> Starting Download")
             s3_folder = "production"
             local_dir = SAVED_MODEL_DIR
-            bucket = self.bucket
+            bucket = bucket
             for obj in bucket.objects.filter(Prefix=s3_folder):
                 target = obj.key if local_dir is None \
                     else os.path.join(local_dir, os.path.relpath(obj.key, s3_folder))
@@ -72,7 +66,14 @@ class LoadIndex:
     def get_best_index_path(self,) -> str:
         try:
             if not os.path.exists(self.index_file_path):
-                self.download_latest_model()
+                config = AwsStorage()
+                session = Session(aws_access_key_id=config.ACCESS_KEY_ID,
+                                   aws_secret_access_key=config.SECRET_KEY,
+                                   region_name=config.REGION_NAME)
+                s3 = session.resource("s3")
+                bucket = s3.Bucket(config.BUCKET_NAME)
+                
+                self.download_latest_model(bucket)
             
             timestamps = os.listdir(self.index_file_path)
             if len(timestamps) == 0:
@@ -87,27 +88,6 @@ class LoadIndex:
         except Exception as e:
             raise JobRecException(e,sys)
         
-    '''
-    def is_model_exists(self) -> bool:
-        try:
-            if not os.path.exists(self.index_file_path):
-                self.download_latest_model()
-                return True
-
-            timestamps = os.listdir(self.index_file_path)
-            if len(timestamps) == 0:
-                return False
-
-            latest_index_path = self.get_best_index_path()
-            if not os.path.exists(latest_index_path):
-                self.download_latest_model()
-                return True
-
-            return True
-
-        except Exception as e:
-            raise JobRecException(e,sys)
-    '''
 
 if __name__ == "__main__":
     ob1 = LoadIndex()

@@ -44,20 +44,6 @@ class ModelRecommender:
         except Exception as e:
             raise JobRecException(e,sys)
         
-    '''
-    def fetch_job_info(self, dataframe_idx, jobsdf):
-        try:
-            
-            info = jobsdf.iloc[dataframe_idx]
-            meta_dict = {}
-            meta_dict['Job_Name'] = info['Job_Name']
-            meta_dict['Company_Name'] = info['Company_Name']
-            meta_dict['Required_Skills'] = info['Key_Skills']
-            return meta_dict
-        
-        except Exception as e:
-            raise JobRecException(e,sys)
-    '''
 
     def job_search(self, query, topk, index, model):
         try:
