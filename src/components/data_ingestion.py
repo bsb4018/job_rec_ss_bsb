@@ -3,27 +3,37 @@ import pandas as pd
 from src.logger import logging
 from src.exception import JobRecException
 from src.entity.config_entity import DataIngestionConfig
-from src.constant.file_constants import JOBS_DATA_FILE_PATH
+from src.constant.file_constants import DATA_VERSION_FOLER_NAME,DATA_FILE_NAME
 from src.configurations.mongo_setup import MongoDBClient
 from src.entity.artifact_entity import DataIngestionArtifact
-
+from src.configurations.aws_configure import StorageConnection
 class DataIngestion:
     def __init__(self, data_ingestion_config:DataIngestionConfig):
         try:
             self.data_ingestion_config = data_ingestion_config
             self.mongo_client = MongoDBClient()
             self.collection = self.mongo_client.dbcollection
+            self.aws_connection = StorageConnection()
 
+        except Exception as e:
+            raise JobRecException(e,sys)
+
+    def download_data_from_s3(self):
+        try:
+            logging.info("DATA INGESTION: Downloading Data from Cloud...")
+            self.aws_connection.download_data_from_s3()
+            
+            logging.info("DATA INGESTION: Downloading Data from Cloud Complete")
         except Exception as e:
             raise JobRecException(e,sys)
         
     def load_data(self):
         try:
             logging.info("DATA INGESTION: Loading Data...")
-            jobsdf = pd.read_excel(JOBS_DATA_FILE_PATH)
+            data_filepath = os.path.join(DATA_VERSION_FOLER_NAME,DATA_FILE_NAME)
+            jobsdf = pd.read_excel(data_filepath)
             jobsdf.dropna(inplace=True)
-            jobsdf.drop_duplicates(subset=['Key_Skills'],inplace=True)
-
+            
             job_ids = [i for i in range(0,len(jobsdf))]
             jobsdf["job_id"] = job_ids
 
@@ -56,6 +66,7 @@ class DataIngestion:
 
         try:
             logging.info("Entered initiate_data_ingestion method of Data_Ingestion class")
+            self.download_data_from_s3()
             df = self.load_data()
             self.store_data_mongodb(df)
             logging.info("DATA INGESTION: Storing Artifacts...")

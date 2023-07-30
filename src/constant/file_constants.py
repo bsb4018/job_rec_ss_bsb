@@ -24,3 +24,7 @@ AWS_ACCESS_KEY_ID_ENV_KEY = "AWS_ACCESS_KEY_ID"
 AWS_REGION_NAME = "AWS_REGION"
 AWS_SECRET_ACCESS_KEY_ENV_KEY = "AWS_SECRET_ACCESS_KEY"
 MODEL_BUCKET_NAME = "job-recommender-sys-model-bucket-bsb6775"
+DATA_BUCKET_NAME = "job-recommender-sys-model-data-bucket-bsb6775"
+
+DATA_VERSION_FOLER_NAME = "data-v1.0"
+DATA_FILE_NAME = "jobs_data.xlsx"
