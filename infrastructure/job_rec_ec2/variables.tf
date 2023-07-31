@@ -64,7 +64,7 @@ variable "app_egress_to_port" {
 }
 
 variable "app_volume_size" {
-  default = 16
+  default = 30
   type    = number
 }
 
