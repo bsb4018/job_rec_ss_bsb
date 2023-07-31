@@ -15,6 +15,7 @@ class StoreGeneratePipeline:
     '''
     Defines the Data Storing Pipeline
     '''
+    is_pipeline_running=False
     def __init__(self,):
         try:
             self.store_gen_pipeline_config = StoreGenearatePipelineConfig()

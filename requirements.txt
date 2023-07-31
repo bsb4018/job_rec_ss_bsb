@@ -20,5 +20,8 @@ tqdm
 openpyxl
 boto3
 streamlit
+fastapi
+uvicorn
+itsdangerous
 python-terraform
 -e.

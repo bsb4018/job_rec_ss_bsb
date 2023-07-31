@@ -12,7 +12,7 @@ MODEL_INDEX_SIZE = 768
 MODEL_LOCATION_DIR = "downloaded_model"
 SAVED_MODEL_DIR = "production"
 SAVED_MODEL_FILE_NAME = "production_embed_index.index"
-TOP_N_RESULTS = 6
+TOP_N_RESULTS = 8
 
 DATA_INGESTION_DIR_NAME = "data_ingestion"
 DATA_INGESTION_FILE_NAME = "jobs_data.parquet"
@@ -28,3 +28,7 @@ DATA_BUCKET_NAME = "job-recommender-sys-model-data-bucket-bsb6775"
 
 DATA_VERSION_FOLER_NAME = "data-v1.0"
 DATA_FILE_NAME = "jobs_data.xlsx"
+
+#APP CONSTANTS
+APP_HOST = "0.0.0.0"
+APP_PORT = 8080

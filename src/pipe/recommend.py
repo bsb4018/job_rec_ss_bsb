@@ -30,4 +30,4 @@ class RecommenderPipeline:
 
 if __name__ == "__main__":
     ob1 = RecommenderPipeline()
-    pprint.pprint(ob1.get_recommendations("data science analytics python"))
+    pprint.pprint(ob1.get_recommendations("data analytics devops"))
