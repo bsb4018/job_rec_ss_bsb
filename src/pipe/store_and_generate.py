@@ -11,6 +11,7 @@ from src.components.embed_index import EmbedIndex
 from src.components.model_pusher import ModelPusher
 from src.configurations.aws_s3_syncer import S3Sync
 
+
 class StoreGeneratePipeline:
     '''
     Defines the Data Storing Pipeline
