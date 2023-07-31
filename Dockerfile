@@ -10,6 +10,7 @@ COPY . /app
 
 RUN pip install -r requirements.txt
 
-CMD ["python3", "rec_app.py"]
+#CMD ["python", "rec_app.py"]
 
-#CMD ["uvicorn", "rec_app:app", "--host", "0.0.0.0", "--port", "8080"]
+
+CMD ["uvicorn", "rec_app:app", "--host", "0.0.0.0", "--port", "5000"]
