@@ -31,4 +31,4 @@ DATA_FILE_NAME = "jobs_data.xlsx"
 
 #APP CONSTANTS
 APP_HOST = "0.0.0.0"
-APP_PORT = 8080
+APP_PORT = 5000

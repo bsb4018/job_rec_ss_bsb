@@ -65,10 +65,10 @@ async def predict_route(item: Job_Rec_Query):
         raise Response(f"Error Occured! {e}")
    
 
-if __name__ == "__main__":
-    app_run(app, host=APP_HOST, port=APP_PORT)
-
-
 #if __name__ == "__main__":
-    #uvicorn.run(app, host=APP_HOST, port=APP_PORT)
+    #app_run(app, host=APP_HOST, port=APP_PORT)
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host=APP_HOST, port=APP_PORT)
 
