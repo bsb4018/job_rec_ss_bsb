@@ -9,7 +9,6 @@ dill
 fastparquet
 from-root
 pip-chill
-path
 PyYAML
 passlib
 pymongo
@@ -24,4 +23,14 @@ fastapi
 uvicorn
 itsdangerous
 python-terraform
+botocore-stubs
+httptools
+imblearn
+mypy-boto3-s3
+python-dotenv
+types-s3transfer
+watchfiles
+websockets
+wincertstore
+neuro-mf
 -e.
