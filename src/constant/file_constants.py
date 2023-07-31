@@ -1,6 +1,6 @@
 
 
-JOBS_DATA_FILE_PATH = "data/jobs_data.xlsx"
+#JOBS_DATA_FILE_PATH = "data/jobs_data.xlsx"
 MONGODB_URL_KEY = "MONGO_DB_URL"
 MONGO_DATABASE_NAME = "jobs_db"
 MONGO_COLLECTION_NAME = "jobs_collection"

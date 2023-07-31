@@ -20,4 +20,5 @@ tqdm
 openpyxl
 boto3
 streamlit
+python-terraform
 -e.
