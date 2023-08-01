@@ -35,7 +35,7 @@ variable "app_sg_group_name" {
 
 variable "app_ingress_from_port" {
   type    = list(number)
-  default = ["22", "80", "443", "8080", "3000", "9100", "9090"]
+  default = ["22", "80", "443", "8080", "3000", "9100", "9090", "8501"]
 }
 
 variable "app_cidr_block" {

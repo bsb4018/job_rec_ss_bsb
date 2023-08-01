@@ -6,14 +6,10 @@ WORKDIR /app
 
 COPY . /app
 
-#RUN apt-get update && apt-get install ffmpeg libsm6 libxext6 unzip -y && pip install -r requirements.txt
-
-
 RUN pip install -r requirements.txt
 
-#CMD ["python", "rec_app.py"]
+EXPOSE 8501
 
+ENTRYPOINT ["streamlit", "run", "sapp.py", "--server.port=8501", "--server.address=0.0.0.0"]
 
-#CMD ["uvicorn", "rec_app:app", "--host", "0.0.0.0", "--port", "5000"]
-
-CMD ["streamlit" , "run", "sapp.py"]
+#CMD ["streamlit", "run", "sapp.py"]
