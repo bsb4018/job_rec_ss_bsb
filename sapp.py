@@ -2,9 +2,24 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 from src.pipe.recommend import RecommenderPipeline
+from src.pipe.store_and_generate import StoreGeneratePipeline
 import pprint
 
 st.title(" Job Recommendations  ")
+
+
+train_button = st.button(label="Train Model", type="primary")
+
+if train_button:
+    # Run the train function and get the results
+    store_gen_pipeline = StoreGeneratePipeline()
+    
+    if store_gen_pipeline.is_pipeline_running:
+        st.write("Training pipeline is already running.")
+        
+    store_gen_pipeline.run_pipeline()
+    st.write("Training successful !!")
+
 
 # Get the search term from the user through a text input widget
 search_term = st.text_input(
