@@ -21,7 +21,12 @@ class ModelRecommender:
             raise JobRecException(e,sys)
         
     def fetch_job_results(self, index):
+        '''
+        Takes input an index, connects to MongoDB and returns 
+        the corresponding job details belonging to the input index
+        '''
         try:
+            logging.info("Model Recommender: Getting Job Details from MongoDB...")
             meta_dict = {}
             job_name = ""
             company_name = ""
@@ -46,13 +51,21 @@ class ModelRecommender:
         
 
     def job_search(self, query, topk, index, model):
+        '''
+        Takes input user query, number if recommendations to be given, index file
+        and the model used for embedding to perform a similarity search  
+        '''
         try:
+
+            logging.info("Model Recommender: Similarity searching using FAISS...")
             t = time.time()
                        
             query_vector = model.encode([query])
             topk = index.search(query_vector, topk)
 
             print('>>>> Results in Total Time: {}'.format(time.time()-t))
+
+            logging.info("Model Recommender: Fetching Job Details from the indexes...")
    
             topk_ids = topk[1].tolist()[0]
             topk_ids = list(np.unique(topk_ids))
@@ -64,16 +77,22 @@ class ModelRecommender:
             raise JobRecException(e,sys)
         
     def recommend(self, query):
+        '''
+        Takes input a query of key skills for users, loads the embedding model 
+        and FAISS indexed file to return recommendations to users
+        '''
         try:
             topk = TOP_N_RESULTS
 
+            logging.info("Model Recommender: Loading Model and Index...") 
             #load model path from model location
             model = self.model_loader.load_model()
             
             #load index file path from production
             jobs_index_path = self.index_loader.get_best_index_path()
             index = faiss.read_index(jobs_index_path)
-
+            
+            logging.info("Model Recommender: Starting to perform Similarity Search...") 
             #pass to model recommender
             results = self.job_search(query, topk, index, model)
             return results

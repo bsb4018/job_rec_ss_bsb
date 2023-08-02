@@ -16,11 +16,17 @@ class ModelPusher:
             raise JobRecException(e,sys) from e
 
     def initiate_model_pusher(self,) -> ModelPusherArtifact:
+        '''
+        Starts the model pusher component
+        '''
         try:
             logging.info("Entered initiate_model_pusher method of ModelPusher class")
 
-            faiss_index_file_path = self.data_embed_index_artifact.faiss_index_file_path
+            logging.info("Model Pusher: Load embed index artifact...")
 
+            faiss_index_file_path = self.data_embed_index_artifact.faiss_index_file_path
+            
+            logging.info("Model Pusher: Creating a production path of it does't exist...")
             #Pushing the trained model in a the saved path for production
             model_file_path = self.model_pusher_config.saved_model_path
             os.makedirs(os.path.dirname(model_file_path),exist_ok=True)

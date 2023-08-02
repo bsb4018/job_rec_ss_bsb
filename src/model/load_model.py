@@ -12,11 +12,19 @@ class LoadModel:
             raise JobRecException(e,sys)
         
     def download_model(self):
+        '''
+        Downloads the SBERT model if not already downloaded
+        '''
         try:
+            logging.info("Load Model: Downloading the SBERT pretrained model...")
             model = SentenceTransformer(MODEL_NAME)
             model_location_path = self.model_location_path
+
+            logging.info("Load Model: Saving the downloaded model...")
             os.makedirs(model_location_path, exist_ok=True)
             model.save(model_location_path)
+
+            logging.info("Load Model: Saving Complete")
             
             return model
         
@@ -24,11 +32,17 @@ class LoadModel:
             raise JobRecException(e,sys)
     
     def load_model(self):
+        '''
+        Loads the SBERT model
+        '''
         try:
+            logging.info("Load Model: Loading the SBERT pretrained model...")
             if not os.path.exists(self.model_location_path):
                 model = self.download_model()
             else:
                 model = SentenceTransformer(self.model_location_path)
+
+            logging.info("Load Model: Loading Complete")
 
             return model
         

@@ -19,6 +19,9 @@ class DataIngestion:
             raise JobRecException(e,sys)
 
     def download_data_from_s3(self):
+        '''
+        Downloads data from AWS S3
+        '''
         try:
             logging.info("DATA INGESTION: Downloading Data from Cloud...")
             self.aws_connection.download_data_from_s3()
@@ -28,26 +31,39 @@ class DataIngestion:
             raise JobRecException(e,sys)
         
     def load_data(self):
+        '''
+        Loads the downloaded data, removes missing columns and rows, adds indexes and saves the data into parquet file
+        '''
         try:
             logging.info("DATA INGESTION: Loading Data...")
             data_filepath = os.path.join(DATA_VERSION_FOLER_NAME,DATA_FILE_NAME)
             jobsdf = pd.read_excel(data_filepath)
+
+            logging.info("DATA INGESTION: Dropping Missing Columns and Rows...")
             jobsdf.dropna(inplace=True)
             
+            logging.info("DATA INGESTION: Creating job indexes...")
             job_ids = [i for i in range(0,len(jobsdf))]
             jobsdf["job_id"] = job_ids
 
             save_users_file = self.data_ingestion_config.jobs_file_name
             dir_path = os.path.dirname(save_users_file)
+
+            logging.info("DATA INGESTION: Saving the ingested data in aprquet...")
             os.makedirs(dir_path, exist_ok=True)
             jobsdf.to_parquet(save_users_file, engine='fastparquet', index=False)
-            logging.info("Data Ingested")
+
+            logging.info("DATA INGESTION: Data store done...")
+
             return jobsdf
         
         except Exception as e:
             raise JobRecException(e,sys)
         
     def store_data_mongodb(self,df):
+        '''
+        Takes the loaded dataframe and stores the data in MongoDB for use in prediction/recommendation
+        '''
         try:
             logging.info("Storing data in MongoDB")
             for index,row in df.iterrows():
@@ -61,9 +77,10 @@ class DataIngestion:
         except Exception as e:
             raise JobRecException(e,sys)
         
-
     def initiate_data_ingestion(self) -> DataIngestionArtifact:
-
+        '''
+        Starts the data ingestion component
+        '''
         try:
             logging.info("Entered initiate_data_ingestion method of Data_Ingestion class")
             self.download_data_from_s3()

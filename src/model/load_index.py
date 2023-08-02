@@ -13,8 +13,11 @@ class LoadIndex:
             raise JobRecException(e,sys)
 
     def download_latest_model(self,bucket):
+        '''
+        Download the latest model from production AWS S3 bucket
+        '''
         try:
-            logging.info("Connecting to Bucket -> Starting Download")
+            logging.info("LoadIndex: Connecting to Bucket -> Starting Download")
             s3_folder = "production"
             local_dir = SAVED_MODEL_DIR
             bucket = bucket
@@ -27,11 +30,14 @@ class LoadIndex:
                     continue
                 bucket.download_file(obj.key, target)
 
-            logging.info("Download Complete")
+            logging.info("Load Index: Download Complete")
         except Exception as e:
             raise JobRecException(e,sys)
         
     def timestamp_converter(self,integer_timestamp):
+        '''
+        Converts a timestamp to directory structure
+        '''
         try:
             # Convert the integer back to individual components
             second = integer_timestamp % 100
@@ -64,7 +70,11 @@ class LoadIndex:
 
     
     def get_best_index_path(self,) -> str:
+        '''
+        Get the best model index path
+        '''
         try:
+            logging.info("Load Index: Creating AWS Sesssion to downlaod the production model index...")
             if not os.path.exists(self.index_file_path):
                 config = AwsStorage()
                 session = Session(aws_access_key_id=config.ACCESS_KEY_ID,
@@ -75,6 +85,7 @@ class LoadIndex:
                 
                 self.download_latest_model(bucket)
             
+            logging.info("Load Index: Converting the latest timestamp to directory structure...")
             timestamps = os.listdir(self.index_file_path)
             if len(timestamps) == 0:
                 return False
@@ -82,6 +93,8 @@ class LoadIndex:
             timestamps = list(map(int, os.listdir(self.index_file_path)))
             latest_timestamp = max(timestamps)
             latest_timestamp = self.timestamp_converter(latest_timestamp)
+
+            logging.info("Load Index: Latest production model index loading complete")
             latest_index_path = os.path.join(self.index_file_path, f"{latest_timestamp}", SAVED_MODEL_FILE_NAME)
             return latest_index_path       
         

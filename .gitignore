@@ -158,3 +158,4 @@ artifacts/
 src/model/downloaded_model/
 data-v1.0/
 trt.txt
+memory_profile.log
