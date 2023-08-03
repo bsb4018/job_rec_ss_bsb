@@ -11,6 +11,8 @@ import pandas as pd
 from pydantic import BaseModel
 from src.pipe.recommend import RecommenderPipeline
 from src.constant.file_constants import APP_HOST, APP_PORT
+from src.logger import logging
+
 app = FastAPI()
 
 origins = ["*"]
@@ -36,7 +38,7 @@ class Job_Rec_Query(BaseModel):
 @app.get("/train")
 async def train_routed():
     try:
-
+        logging.info("Model Training: Data Ingest, Embed, Indexing, Pushing to Production Triggered")
         store_gen_pipeline = StoreGeneratePipeline()
         
         if store_gen_pipeline.is_pipeline_running:
@@ -52,9 +54,11 @@ async def train_routed():
 @app.post("/recommend_jobs")
 async def predict_route(item: Job_Rec_Query):
     try:
-       
+        logging.info("Model Recommendation Pipeline Triggered")
         item_dict = dict(item)
         prediction_pipeline = RecommenderPipeline()
+
+        logging.info("Fetching Recommendations:")
         results = prediction_pipeline.get_recommendations(item_dict["user_query"])
 
         if not results:

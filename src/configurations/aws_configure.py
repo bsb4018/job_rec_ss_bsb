@@ -4,7 +4,7 @@ from src.constant.file_constants import AWS_ACCESS_KEY_ID_ENV_KEY,AWS_REGION_NAM
 
 class AwsStorage:
     '''
-    Connecting to AWS using Credentials From System
+    Connecting to AWS using Credentials From System Environments
     '''
     def __init__(self):
         self.ACCESS_KEY_ID = os.getenv(AWS_ACCESS_KEY_ID_ENV_KEY)
@@ -32,11 +32,7 @@ class StorageConnection:
 
     def download_data_from_s3(self):
         """
-        Download the contents of a folder directory
-        Args:
-            bucket_name: the name of the s3 bucket
-            s3_folder: the folder path in the s3 bucket
-            local_dir: a relative or absolute directory path in the local file system
+        Download the contents of a folder in AWS S3 to a local directory
         """
         
         s3_folder = DATA_VERSION_FOLER_NAME

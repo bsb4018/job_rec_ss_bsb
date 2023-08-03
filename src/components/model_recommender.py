@@ -70,7 +70,8 @@ class ModelRecommender:
             topk_ids = topk[1].tolist()[0]
             topk_ids = list(np.unique(topk_ids))
             results = [self.fetch_job_results(int(idx.item())) for idx in topk_ids]
-
+            
+            logging.info("Model Recommender: Got the recommedations -> Returning results to the Recommender Pipeline")
             return results
         
         except Exception as e:
@@ -95,6 +96,8 @@ class ModelRecommender:
             logging.info("Model Recommender: Starting to perform Similarity Search...") 
             #pass to model recommender
             results = self.job_search(query, topk, index, model)
+
+            logging.info("Model Recommender: Search complete -> Returning Results")
             return results
         
         except Exception as e:

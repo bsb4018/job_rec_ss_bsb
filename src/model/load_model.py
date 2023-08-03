@@ -33,7 +33,7 @@ class LoadModel:
     
     def load_model(self):
         '''
-        Loads the SBERT model
+        Loads the pretrianed SBERT model
         '''
         try:
             logging.info("Load Model: Loading the SBERT pretrained model...")

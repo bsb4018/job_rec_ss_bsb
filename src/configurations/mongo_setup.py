@@ -11,6 +11,9 @@ ca = certifi.where() #Reference the installed certificate authority(CA) bundle
 
 
 class MongoDBClient:
+    '''
+    Connects to MongoDB Compass Database Collection
+    '''
     client = None
 
     def __init__(self):

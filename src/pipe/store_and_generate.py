@@ -15,7 +15,7 @@ from src.configurations.aws_s3_syncer import S3Sync
 
 class StoreGeneratePipeline:
     '''
-    Defines the Data Storing Pipeline
+    Defines the Data Storing Embedding Indexing and Pushing to Production Pipeline
     '''
     is_pipeline_running=False
     def __init__(self,):
@@ -27,6 +27,9 @@ class StoreGeneratePipeline:
         
     #@profile
     def start_data_ingestion(self) -> DataIngestionArtifact:
+        '''
+        Starts the data ingestion pipeline
+        '''
         try:
             
             logging.info(
@@ -50,6 +53,9 @@ class StoreGeneratePipeline:
             raise JobRecException(e, sys)
         
     def start_data_embed_indexing(self,data_ingestion_artifact:DataIngestionArtifact) -> EmbedIndexingArtifact:
+        '''
+        Takes input the data ingestion artifact and Starts the data nembeddung and indexing pipeline
+        '''
         try:
             
             logging.info(
@@ -73,6 +79,9 @@ class StoreGeneratePipeline:
             raise JobRecException(e, sys)
     
     def start_model_pusher(self,data_embed_index_artifact:EmbedIndexingArtifact):
+        '''
+        Takes input the data embedding and indexing artifact and Starts the model pusher pipeline
+        '''
         try:
             logging.info("Entered the start_model_pusher method of StoreGeneratePipeline class")
             model_pusher_config = ModelPusherConfig(store_gen_pipeline_config=self.store_gen_pipeline_config)
@@ -89,6 +98,9 @@ class StoreGeneratePipeline:
             raise  JobRecException(e,sys)
     
     def sync_logs_dir_to_s3(self):
+        '''
+        Starts syncing the logs to AWS S3
+        '''
         try:
             logging.info("Entered the sync_logs_dir_to_s3 method of StoreGeneratePipeline class")
             aws_bucket_url = f"s3://{MODEL_BUCKET_NAME}/logs"
@@ -100,6 +112,9 @@ class StoreGeneratePipeline:
             raise JobRecException(e,sys)
 
     def sync_artifact_dir_to_s3(self):
+        '''
+        Starts syncing the artifacts to AWS S3
+        '''
         try:
             logging.info("Entered the sync_artifact_dir_to_s3 method of StoreGeneratePipeline class")
             aws_bucket_url = f"s3://{MODEL_BUCKET_NAME}/artifact/{self.store_gen_pipeline_config.timestamp}"
@@ -110,6 +125,9 @@ class StoreGeneratePipeline:
             raise JobRecException(e,sys)
 
     def sync_saved_model_dir_to_s3(self):
+        '''
+        Starts syncing the production index file to AWS S3
+        '''
         try:
             logging.info("Entered the sync_saved_model_dir_to_s3 method of StoreGeneratePipeline class")
             aws_bucket_url = f"s3://{MODEL_BUCKET_NAME}/{SAVED_MODEL_DIR}"
@@ -122,18 +140,28 @@ class StoreGeneratePipeline:
 
     #@profile    
     def run_pipeline(self):
+        '''
+        Starts the main model creation pipeline
+        '''
         try:
             logging.info("Starting the Data Storing and Embedding Genearation Pipeline")
             StoreGenearatePipelineConfig.is_pipeline_running=True
+
+            logging.info("Starting the Data Ingestion Pipeline")
             data_ingestion_artifact: DataIngestionArtifact = self.start_data_ingestion()
+
+            logging.info("Starting the Data Embedding and Indexing Pipeline")
             data_embed_index_artifact: EmbedIndexingArtifact = self.start_data_embed_indexing(data_ingestion_artifact)
+            
+            logging.info("Starting the Model Pusher Pipeline")
             model_pusher_artifact = self.start_model_pusher(data_embed_index_artifact)
             StoreGenearatePipelineConfig.is_pipeline_running=False
             
             #self.sync_logs_dir_to_s3()
+            logging.info("Starting the Syncing Pipelines")
             self.sync_artifact_dir_to_s3()
             self.sync_saved_model_dir_to_s3()
-            logging.info("Data Ingested, Embedded, Indexed Pushed -> Done")
+            logging.info("Data Ingested, Embedded, Indexed and Pushed to Production -> Done")
 
         except Exception as e:
             self.sync_artifact_dir_to_s3()

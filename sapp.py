@@ -4,6 +4,8 @@ import streamlit as st
 from src.pipe.recommend import RecommenderPipeline
 from src.pipe.store_and_generate import StoreGeneratePipeline
 import pprint
+from src.logger import logging
+
 
 st.title(" Job Recommendations  ")
 
@@ -11,6 +13,7 @@ st.title(" Job Recommendations  ")
 train_button = st.button(label="Train Model", type="primary")
 
 if train_button:
+    logging.info("Model Training: Data Ingest, Embed, Indexing, Pushing to Production Triggered")
     # Run the train function and get the results
     store_gen_pipeline = StoreGeneratePipeline()
     
@@ -44,6 +47,7 @@ def get_job_recommendations(key_skills_query, pprint=True):
 if is_valid_input(search_term):
     # And if they have clicked the search button
     if search_button:
+        logging.info("Model Recommendation Pipeline Triggered")
         # Run the search function and get the results
         answer = get_job_recommendations(search_term, True)
         # Iterate through the results and display the recommendations
