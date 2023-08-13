@@ -19,7 +19,7 @@ class AwsStorage:
 
 class StorageConnection:
     """
-    Created connection with S3 bucket using boto3 api to fetch the model from Repository.
+    Creates connection with S3 bucket using boto3 api to fetch the model from Repository.
     """
     def __init__(self):
         self.config = AwsStorage()

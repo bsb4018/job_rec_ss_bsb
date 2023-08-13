@@ -13,3 +13,4 @@ EXPOSE 8501
 ENTRYPOINT ["streamlit", "run", "sapp.py", "--server.port=8501", "--server.address=0.0.0.0"]
 
 #CMD ["streamlit", "run", "sapp.py"]
+

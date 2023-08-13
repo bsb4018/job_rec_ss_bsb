@@ -20,13 +20,27 @@ class DataIngestion:
 
     def download_data_from_s3(self):
         '''
-        Downloads data from AWS S3
+        Downloads data from AWS S3 if data is not alreadt dowloaded and available
         '''
         try:
             logging.info("DATA INGESTION: Downloading Data from Cloud...")
-            self.aws_connection.download_data_from_s3()
+            folder_to_check = os.path.join(DATA_VERSION_FOLER_NAME)
+            if not os.path.exists(folder_to_check) or not os.path.isdir(folder_to_check):
+                self.aws_connection.download_data_from_s3()
+                logging.info("DATA INGESTION: Downloading Data from Cloud Complete")
             
-            logging.info("DATA INGESTION: Downloading Data from Cloud Complete")
+
+            # Check if the file exists in the folder
+            file_to_check = os.path.join(folder_to_check, DATA_FILE_NAME)
+            if not os.path.exists(file_to_check) or not os.path.isfile(file_to_check):
+                self.aws_connection.download_data_from_s3()
+                logging.info("DATA INGESTION: Downloading Data from Cloud Complete")
+            
+            else:
+                logging.info("DATA INGESTION: Data Already Downloaded")
+            
+            return
+            
         except Exception as e:
             raise JobRecException(e,sys)
         
@@ -49,7 +63,7 @@ class DataIngestion:
             save_users_file = self.data_ingestion_config.jobs_file_name
             dir_path = os.path.dirname(save_users_file)
 
-            logging.info("DATA INGESTION: Saving the ingested data in aprquet...")
+            logging.info("DATA INGESTION: Saving the ingested data in parquet...")
             os.makedirs(dir_path, exist_ok=True)
             jobsdf.to_parquet(save_users_file, engine='fastparquet', index=False)
 
