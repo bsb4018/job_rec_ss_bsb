@@ -1,5 +1,4 @@
 import os,sys
-from memory_profiler import profile
 from src.exception import JobRecException
 from src.logger import logging
 from src.constant.file_constants import MODEL_BUCKET_NAME,SAVED_MODEL_DIR
@@ -10,7 +9,6 @@ from src.components.data_ingestion import DataIngestion
 from src.components.embed_index import EmbedIndex
 from src.components.model_pusher import ModelPusher
 from src.configurations.aws_s3_syncer import S3Sync
-
 
 
 class StoreGeneratePipeline:
@@ -137,8 +135,7 @@ class StoreGeneratePipeline:
         except Exception as e:
             raise JobRecException(e,sys)
 
-
-    #@profile    
+ 
     def run_pipeline(self):
         '''
         Starts the main model creation pipeline

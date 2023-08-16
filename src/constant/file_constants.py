@@ -32,7 +32,7 @@ EMBED_INDEXING_FILE_NAME = "embedd_faiss.index"
 AWS_ACCESS_KEY_ID_ENV_KEY = "AWS_ACCESS_KEY_ID"
 AWS_REGION_NAME = "AWS_REGION"
 AWS_SECRET_ACCESS_KEY_ENV_KEY = "AWS_SECRET_ACCESS_KEY"
-MODEL_BUCKET_NAME =  "46971bsb4018-job-rec-s3" #"job-recommender-sys-model-bucket-bsb6775"
+MODEL_BUCKET_NAME =  "job-recommender-sys-model-bucket-bsb6775" #"46971bsb4018-job-rec-s3" 
 DATA_BUCKET_NAME = "job-recommender-sys-model-data-bucket-bsb6775"
 
 MONGODB_URL_KEY = "MONGO_DB_URL"
