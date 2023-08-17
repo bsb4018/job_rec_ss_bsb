@@ -19,6 +19,7 @@ We collect data including collecting Job name, Company name, Experience required
 We searched each category like IT, Human Resources, Sales and Management, Analytics etc. take jobs information from the results we get from various online job portals. We currently take only the Job Name, Company Name, Key Skills, and Experience Required for the position. In this project the intention to keep a short window of jobs as in a week-old job for building the recommendation system.
 This could be extended for 3 weeks to up to a month since fresh jobs are out in that timeframe and we do not want to use jobs data that are older than that timeframe since most jobs usually get filled within that time frame and new fresh job openings are out. 
 
+![image](https://github.com/bsb4018/job_rec_ss_bsb/blob/main/docs/data_img.png)
 
 ## Tech Stack Used
 1. Python 
