@@ -184,7 +184,7 @@ Enter yes on prompt Enter a value
 ```
 
 ### [Extra] Step 13 - Run locally
-Follow Step 1,2,3,4,7 Data Bucket Part
+Follow Step 1,2,3,4,7 Data Bucket Part <br>
 Open the repository and run the following command
 ```bash
 streamlit run sapp.py
