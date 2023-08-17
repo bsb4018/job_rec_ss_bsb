@@ -21,21 +21,21 @@ This could be extended for 3 weeks to up to a month since fresh jobs are out in 
 
 
 ## Tech Stack Used
-#### 1. Python 
-#### 2. MongoDB
-#### 3. Pytorch SBERT
-#### 3. AWS
-#### 4. Docker 
-#### 5. Streamlit
+1. Python 
+2. MongoDB
+3. Pytorch SBERT
+4. AWS
+5. Docker
+6. Streamlit
 
 
-## Infrastructure Required.
-#### 1. AWS S3
-#### 2. AWS ECR
-#### 3. AWS EC2
-#### 4. AWS Elastic IP
-#### 5. Github Actions
-#### 6. Terraform
+## Infrastructure Required
+1. AWS S3
+2. AWS ECR
+3. AWS EC2
+4. AWS Elastic IP
+5. Github Actions
+6. Terraform
 
 
 ## How to run?
