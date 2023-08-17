@@ -37,10 +37,10 @@ Before we run the project, make sure that you are having MongoDB compass account
 
 
 ## Project Architecture
-![image](https://github.com/bsb4018/job_rec_ss_bsb.git/blob/main/docs/hld.png)
+![image](https://github.com/bsb4018/job_rec_ss_bsb/blob/main/docs/hld.png)
 
 ## Deployment Architecture
-![image](https://github.com/bsb4018/job_rec_ss_bsb.git/blob/main/docs/deployment.png)
+![image](https://github.com/bsb4018/job_rec_ss_bsb/blob/main/docs/deployment.png)
 
 ## Run Steps
 
