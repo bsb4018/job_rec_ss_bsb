@@ -90,6 +90,7 @@ terraform { <br>
    backend "s3" { <br>
     bucket = “unique_name” <br>
 
+Open terminal and type the following
 ```bash
 cd infrastructure
 terraform init
