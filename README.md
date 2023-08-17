@@ -129,9 +129,11 @@ When prompted Connected to GitHub Listening for Jobs -> Our server is ready
 
 
 ### Step 7 – AWS S3 Buckets setup
-
+#### Data Bucket
 Open AWS Console and create AWS S3 bucket to store data <br>
+Create a folder with name data-v1.0 and upload the data excel file jobs_data.xlsx inside it.
 Goto src/constants/file_constants.py and replace the name DATA_BUCKET_NAME with the name of the bucket created <br>
+#### Model and Artifacts Bucket (For Cloud Deployment)
 We will use the bucket already created by Terraform to store the model and artifacts since it forms the part of model pipeline <br>
 Goto AWS S3 console and find the S3 bucket “aws-account-num”bsb4018-job-rec-s3 and copy the name <br>
 Goto src/constants/file_constants.py and replace the name MODEL_BUCKET_NAME accordingly
@@ -182,6 +184,7 @@ Enter yes on prompt Enter a value
 ```
 
 ### [Extra] Step 13 - Run locally
+Follow Step 1,2,3,4,7 Data Bucket Part
 Open the repository and run the following command
 ```bash
 streamlit run sapp.py
