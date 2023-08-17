@@ -3,16 +3,22 @@
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) &nbsp; ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white) &nbsp; ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) &nbsp; ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) &nbsp; <br> ![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white) &nbsp; ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white) &nbsp; ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
 
-### Problem Statement
+## Problem Statement
 Job Recommender System for recommending jobs to candidates in a jobs-board-website platform
 Candidates Get Recommended based on
 #### 1. Key Skills that the candidates possess -> Candidates enters key skills
 #### 2. Job Skills -> Key skills required for the jobs are matched with candidate key skills
 
-### Solution Proposed
+## Solution Proposed
 We frame the problem as a semantic search problem where we embedd job skills and index them to perform similarity search with user key skills as input query
 We use MongoDB to store our jobs data for our prediction pipeline
 We use pretrained SBERT model for embedding and FAISS similarity search for scalability
+
+## Data
+We collect data including collecting Job name, Company name, Experience required, Key Skills required for the job from each broad job category like Tech and IT, Human Resources, Management etc.
+We searched each category like IT, Human Resources, Sales and Management, Analytics etc. take jobs information from the results we get from various online job portals. We currently take only the Job Name, Company Name, Key Skills, and Experience Required for the position. In this project the intention to keep a short window of jobs as in a week-old job for building the recommendation system.
+This could be extended for 3 weeks to up to a month since fresh jobs are out in that timeframe and we do not want to use jobs data that are older than that timeframe since most jobs usually get filled within that time frame and new fresh job openings are out. 
+
 
 ## Tech Stack Used
 #### 1. Python 
