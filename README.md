@@ -67,19 +67,19 @@ pip install -r requirements.txt
 
 ### Step 4 - Setup MongoDB Compass
 
-Create a MongoDB Compass Account  
-Create a project and a cluster 
-Get the database connection string
+Create a MongoDB Compass Account <br>
+Create a project and a cluster <br>
+Get the database connection string <br>
 MONGO_DB_URL = "database connection string"
 
 
 ### Step 5 – Setup Infrastructure using Terraform
 
-Create an S3 bucket with “unique_name” from AWS Console to store terraform state
-Goto infrastructure/module.tf and replace the name 
-terraform {
-   backend "s3" {
-    bucket = “unique_name”
+Create an S3 bucket with “unique_name” from AWS Console to store terraform state <br>
+Goto infrastructure/module.tf and replace the name <br>
+terraform { <br>
+   backend "s3" { <br>
+    bucket = “unique_name” <br>
 
 ```bash
 cd infrastructure
@@ -91,13 +91,13 @@ Enter yes on prompt Enter a value
 
 ### Step 6 - AWS EC2 setup
 
-Open the EC2 instance page in AWS Console
-Select the EC2 instance created using Terraform [Name: App Server]
-Select Security -> Security Groups -> Edit inbound rules -> Add rule
-Type – Custom TCP
-Port – 8501
-Source – 0.0.0.0/0
-Select Save rules
+Open the EC2 instance page in AWS Console <br>
+Select the EC2 instance created using Terraform [Name: App Server] <br>
+Select Security -> Security Groups -> Edit inbound rules -> Add rule <br>
+Type – Custom TCP <br>
+Port – 8501 <br>
+Source – 0.0.0.0/0 <br>
+Select Save rules <br>
 Connect to the EC2 machine and run the following commands
 
 ```bash
@@ -110,46 +110,45 @@ sudo usermod -aG docker ubuntu
 newgrp docker
 ```
 
-Open the repository in GitHub
-Goto Settings -> Actions -> Runners -> New self-hosted runner -> Linux
-Copy and run the given commands on the connected EC2 machine
+Open the repository in GitHub <br>
+Goto Settings -> Actions -> Runners -> New self-hosted runner -> Linux <br>
+Copy and run the given commands on the connected EC2 machine <br>
 
-When prompted to enter the name of the runner -> Enter “self-hosted”
-When prompted Connected to GitHub Listening for Jobs -> Our server is ready
+When prompted to enter the name of the runner -> Enter “self-hosted” <br>
+When prompted Connected to GitHub Listening for Jobs -> Our server is ready 
 
 
 ### Step 7 – AWS S3 Buckets setup
 
-Open AWS Console and create AWS S3 bucket to store data
-Goto src/constants/file_constants.py and replace the name DATA_BUCKET_NAME with the name of the bucket created
-
-We will use the bucket already created by Terraform to store the model and artifacts since it forms the part of model pipeline
-Goto AWS S3 console and find the S3 bucket “aws-account-num”bsb4018-job-rec-s3 and copy the name
+Open AWS Console and create AWS S3 bucket to store data <br>
+Goto src/constants/file_constants.py and replace the name DATA_BUCKET_NAME with the name of the bucket created <br>
+We will use the bucket already created by Terraform to store the model and artifacts since it forms the part of model pipeline <br>
+Goto AWS S3 console and find the S3 bucket “aws-account-num”bsb4018-job-rec-s3 and copy the name <br>
 Goto src/constants/file_constants.py and replace the name MODEL_BUCKET_NAME accordingly
 
 
 ### Step 8 – AWS ECR setup
 
-Open AWS ECR Console and note the name of the ECR created using Terraform
-It will of format somenum.dkr.ecr.region-name.amazonaws.com/job_rec-bsb4108-ecr
-Get a note of the following two which will be our environment secrets
-AWS_ECR_LOGIN_URI = somenum.dkr.ecr.region-name.amazonaws.com
-ECR_REPOSITORY_NAME = job_rec-bsb4108-ecr
+Open AWS ECR Console and note the name of the ECR created using Terraform <br>
+It will of format somenum.dkr.ecr.region-name.amazonaws.com/job_rec-bsb4108-ecr <br>
+Get a note of the following two which will be our environment secrets <br>
+AWS_ECR_LOGIN_URI = somenum.dkr.ecr.region-name.amazonaws.com <br>
+ECR_REPOSITORY_NAME = job_rec-bsb4108-ecr <br>
 
-Additionally get a note of the following
-AWS_ACCESS_KEY_ID = “secret access id of AWS account”
-AWS_SECRET_ACCESS_KEY = “secret access key of AWS account”
+Additionally get a note of the following <br>
+AWS_ACCESS_KEY_ID = “secret access id of AWS account” <br>
+AWS_SECRET_ACCESS_KEY = “secret access key of AWS account” <br>
 AWS_REGION_NAME = “region-name”
 
 
 ### Step 9 – Add the following to GitHub Secrets
 
-MONGO_DB_URL=<MONGO_DB_URL
-AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY_ID>
-AWS_SECRET_ACCESS_KEY=<AWS_SECRET_ACCESS_KEY>
-AWS_REGION_NAME=<AWS_REGION_NAME>
-AWS_ECR_LOGIN_URI = <AWS_ECR_LOGIN_URI>
-ECR_REPOSITORY_NAME = <ECR_REPOSITORY_NAME>
+MONGO_DB_URL=<MONGO_DB_URL> <br>
+AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY_ID> <br>
+AWS_SECRET_ACCESS_KEY=<AWS_SECRET_ACCESS_KEY> <br>
+AWS_REGION_NAME=<AWS_REGION_NAME> <br>
+AWS_ECR_LOGIN_URI = <AWS_ECR_LOGIN_URI> <br>
+ECR_REPOSITORY_NAME = <ECR_REPOSITORY_NAME> 
 
 ### Step 10 – Deploy CICD pipeline
 
