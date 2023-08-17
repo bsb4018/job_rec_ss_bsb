@@ -39,7 +39,9 @@ This could be extended for 3 weeks to up to a month since fresh jobs are out in 
 
 
 ## How to run?
-Before we run the project, make sure that you are having MongoDB compass account since we are using MongoDB for some data storage. You also need AWS account to access S3, ECR, EC2, Elastic IP Services. You also need to have terraform installed and configured.
+Before running the project, we need to make sure that you are having MongoDB compass account since we are using MongoDB for some data storage. <br>
+We also need AWS account to access S3, ECR, EC2, Elastic IP Services. <br>
+Also terraform should be installed and configured.
 
 
 ## Project Architecture
